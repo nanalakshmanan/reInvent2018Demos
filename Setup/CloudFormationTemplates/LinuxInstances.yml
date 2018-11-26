@@ -29,6 +29,29 @@ Parameters:
     Description: VPC id for the security group
     Type: String
 Resources:
+  ManagedInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ssm.amazonaws.com
+            - ec2.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      Path: "/"
+  ManagedInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - !Ref ManagedInstanceRole
+      InstanceProfileName: !Ref InstanceProfileName
+    DependsOn: ManagedInstanceRole
   SSHAccessGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -55,7 +78,9 @@ Resources:
         Value: Production
       - Key: Environment
         Value: Production
-    DependsOn: SSHAccessGroup
+    DependsOn: 
+      - SSHAccessGroup 
+      - ManagedInstanceProfile
   Instance2:
     Type: AWS::EC2::Instance
     Properties:
@@ -71,5 +96,7 @@ Resources:
         Value: Production
       - Key: Environment
         Value: Production
-    DependsOn: SSHAccessGroup
+    DependsOn: 
+      - SSHAccessGroup
+      - ManagedInstanceProfile
   
