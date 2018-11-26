@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Description: Deploys 5 instances with the same configuration, from the specified AMI.
+Description: Deploys 2 instances with the same configuration, from the specified AMI.
 Outputs:
   InstanceIds:
     Description: InstanceIds of the instances created
-    Value: !Join [",", [!Ref Instance1, !Ref Instance2, !Ref Instance3, !Ref Instance4, !Ref Instance5]]
+    Value: !Join [",", [!Ref Instance1, !Ref Instance2]]
 Parameters:
   InstanceProfileName:
     Description: Name of the instance profile to attach
@@ -72,51 +72,4 @@ Resources:
       - Key: Environment
         Value: Production
     DependsOn: SSHAccessGroup
-  Instance3:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceType
-      ImageId: !Ref AmiId
-      KeyName: !Ref KeyPairName
-      IamInstanceProfile: !Ref InstanceProfileName
-      SecurityGroupIds: [!GetAtt SSHAccessGroup.GroupId]
-      Tags:
-      - Key: Name
-        Value: HRAppLinux
-      - Key: HRAppEnvironment
-        Value: Production
-      - Key: Environment
-        Value: Production
-    DependsOn: SSHAccessGroup
-  Instance4:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceType
-      ImageId: !Ref AmiId
-      KeyName: !Ref KeyPairName
-      IamInstanceProfile: !Ref InstanceProfileName
-      SecurityGroupIds: [!GetAtt SSHAccessGroup.GroupId]
-      Tags:
-      - Key: Name
-        Value: HRAppLinux
-      - Key: HRAppEnvironment
-        Value: Production
-      - Key: Environment
-        Value: Production
-    DependsOn: SSHAccessGroup
-  Instance5:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: !Ref InstanceType
-      ImageId: !Ref AmiId
-      KeyName: !Ref KeyPairName
-      IamInstanceProfile: !Ref InstanceProfileName
-      SecurityGroupIds: [!GetAtt SSHAccessGroup.GroupId]
-      Tags:
-      - Key: Name
-        Value: HRAppLinux
-      - Key: HRAppEnvironment
-        Value: Production
-      - Key: Environment
-        Value: Production
-    DependsOn: SSHAccessGroup  
+  
